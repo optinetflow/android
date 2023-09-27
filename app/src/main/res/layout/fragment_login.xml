@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -51,8 +52,7 @@
                 android:inputType="numberSigned"
                 android:maxLength="11"
                 android:padding="8dp"
-                android:textColor="@color/colorText"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="@color/colorText" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
@@ -60,16 +60,15 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/custom_edittext"
-                android:drawableStart="@drawable/baseline_person_24"
+                android:drawableStart="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
-                android:maxLength="20"
                 android:fontFamily="@font/iran_sans"
                 android:hint="@string/password"
                 android:inputType="textPassword"
+                android:maxLength="20"
                 android:padding="8dp"
                 android:textAlignment="textEnd"
-                android:textColor="@color/colorText"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="@color/colorText" />
 
             <Button
                 android:id="@+id/loginButton"
@@ -100,5 +99,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

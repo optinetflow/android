@@ -12,19 +12,14 @@ class AuthRepositoryImpl @Inject constructor(
         phone: String,
         password: String
     ): String {
-        try {
-            val loginMutation = LoginMutation(phone = phone, password = password)
-            val response = apolloClient.mutation(loginMutation).execute()
+        val loginMutation = LoginMutation(phone = phone, password = password)
+        val response = apolloClient.mutation(loginMutation).execute()
 
-            val hasError = response.hasErrors()
-            if (hasError) {
-                return response.errors?.get(0)?.message.toString()
-            }
-
-            val accessToken = response.data?.login?.accessToken
-            return accessToken.toString()
-        } catch (e: Exception) {
-            return e.message.toString()
+        val hasError = response.hasErrors()
+        if (hasError) {
+            return response.errors?.get(0)?.message.toString()
         }
+
+        return response.data?.login?.accessToken.toString()
     }
 }

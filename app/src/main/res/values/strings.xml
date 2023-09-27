@@ -246,5 +246,6 @@
     <string name="register">Register</string>
     <string name="already_have_account_go_to_login">از قبل اکانت ساخته اید؟ ورود</string>
     <string name="phone_number">Phone number</string>
+    <string name="error">Error %1$s</string>
 
 </resources>

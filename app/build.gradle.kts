@@ -92,7 +92,12 @@ android {
     }
 
     buildFeatures {
+        compose = true
         viewBinding = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
 
     apollo {
@@ -104,7 +109,6 @@ android {
                 endpointUrl.set("https://arvanvpn.online/api/graphql")
                 schemaFile.set(file("src/main/graphql/schema.graphqls"))
             }
-
         }
     }
 }
@@ -112,9 +116,6 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar", "*.jar"))))
     implementation("androidx.annotation:annotation:1.7.0")
-    testImplementation("junit:junit:4.13.2")
-
-    val nav_version = "2.7.3"
 
     // Androidx
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -128,10 +129,18 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.viewpager2:viewpager2:1.1.0-beta02")
 
+    val nav_version = "2.7.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
-    runtimeOnly("androidx.compose.material3:material3:1.2.0-alpha08")
+    // Compose
+    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
+    implementation(composeBom)
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Androidx ktx
     implementation("androidx.activity:activity-ktx:1.7.2")
