@@ -1,0 +1,16 @@
+mutation Login($phone: String!, $password: String!) {
+    login(data: {
+        phone: $phone
+        password: $password
+    }) {
+        accessToken
+        refreshToken
+        user {
+            id
+            firstname
+            lastname
+            phone
+            role
+        }
+    }
+}
