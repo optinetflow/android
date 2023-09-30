@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.v2ray.ang.ui.auth.register.RegisterFragment"
+        android:name="com.v2ray.ang.ui.auth.register.RegisterScreen"
         android:label="@string/register"
         tools:layout="@layout/fragment_register" >
         <action

@@ -22,4 +22,8 @@ class AuthRepositoryImpl @Inject constructor(
 
         return response.data?.login?.accessToken.toString()
     }
+
+    override suspend fun register(phone: String, password: String) {
+        // TODO
+    }
 }

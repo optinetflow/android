@@ -5,8 +5,8 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
     id("com.apollographql.apollo3").version("3.8.2")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -69,7 +69,6 @@ android {
         jvmTarget = "1.8"
     }
 
-    // map for the version code
     project.ext.set(
         "versionCodes", mapOf(
             "armeabi-v7a" to 1,
@@ -99,18 +98,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.2"
     }
-
-    apollo {
-        service("myService") {
-            packageName.set("com.v2ray.ang")
-            generateOptionalOperationVariables.set(false)
-
-            introspection {
-                endpointUrl.set("https://arvanvpn.online/api/graphql")
-                schemaFile.set(file("src/main/graphql/schema.graphqls"))
-            }
-        }
-    }
 }
 
 dependencies {
@@ -132,21 +119,28 @@ dependencies {
     val nav_version = "2.7.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.1.0-alpha02")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
+    val composeBom = platform("androidx.compose:compose-bom:2023.09.01")
     implementation(composeBom)
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.activity:activity-compose:1.7.2")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Androidx ktx
+    val lifecycle_version = "2.6.2"
     implementation("androidx.activity:activity-ktx:1.7.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
 
     //kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
@@ -179,6 +173,18 @@ dependencies {
     implementation("com.blacksquircle.ui:editorkit:2.8.0")
     implementation("com.blacksquircle.ui:language-base:2.8.0")
     implementation("com.blacksquircle.ui:language-json:2.8.0")
+}
+
+apollo {
+    service("myService") {
+        packageName.set("com.v2ray.ang")
+        generateOptionalOperationVariables.set(false)
+
+        introspection {
+            endpointUrl.set("https://arvanvpn.online/api/graphql")
+            schemaFile.set(file("src/main/graphql/schema.graphqls"))
+        }
+    }
 }
 
 kapt {

@@ -201,7 +201,9 @@
     <string name="connection_connected">متصل است، برای بررسی اتصال ضربه بزنید</string>
     <string name="connection_not_connected">متصل نیست</string>
 
-    <string name="login">ورود</string>
+    <string name="login">ورود به سیستم</string>
+    <string name="action_sign_in_short">ورود</string>
+
     <string name="username">نام کاربری</string>
     <string name="password">رمز عبور</string>
     <string name="not_yet_registered_signup_now">هنوز ثبت نام نکرده اید؟ ثبت نام</string>
@@ -210,6 +212,10 @@
     <string name="already_have_account_go_to_login">از قبل اکانت ساخته اید؟ ورود</string>
     <string name="phone_number">شماره تلفن</string>
     <string name="error">خطا %1$s</string>
+    <string name="repeat_password_again">تکرار رمز عبور</string>
+    <string name="fields_are_empty">شماره تلفن و رمز عبور خالی می باشد!</string>
+    <string name="name">نام</string>
+    <string name="last_name">نام خانوادگی</string>
 
     <string-array name="share_method">
         <item>QRcode</item>

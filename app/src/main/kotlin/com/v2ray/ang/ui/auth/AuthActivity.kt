@@ -1,23 +1,19 @@
 package com.v2ray.ang.ui.auth
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.v2ray.ang.R
-import com.v2ray.ang.ui.BaseActivity
-import dagger.hilt.EntryPoint
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import com.v2ray.ang.ui.compose.OptiNetApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AuthActivity: AppCompatActivity() {
+class AuthActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
 
-        initView()
-    }
-
-    private fun initView() {
-        
+        setContent {
+            OptiNetApp()
+        }
     }
 }

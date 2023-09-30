@@ -1,7 +1,6 @@
 package com.v2ray.ang.ui.auth.login
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.v2ray.ang.AngApplication
 import com.v2ray.ang.data.repository.AuthRepository
@@ -14,9 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val application: Application,
     private val authRepository: AuthRepository
-) : AndroidViewModel(application = application) {
+) : ViewModel() {
 
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Loading)
     val loginState = _loginState.asStateFlow()
