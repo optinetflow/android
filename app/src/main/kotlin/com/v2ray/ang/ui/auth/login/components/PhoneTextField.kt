@@ -10,6 +10,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.v2ray.ang.R
 
 @Composable
@@ -29,8 +31,8 @@ fun PhoneTextField(
     phoneValue: (String) -> Unit
 ) {
     val myValue = rememberSaveable { mutableStateOf("") }
-    val isPhoneNotEmpty = myValue.value.isNotEmpty()
-    val isPhoneValid = myValue.value.length == 11
+    val enableError = remember { mutableStateOf(false) }
+    val maxChar = 11
 
     TextField(
         modifier = modifier
@@ -38,8 +40,10 @@ fun PhoneTextField(
             .padding(top = 10.dp),
         value = myValue.value,
         onValueChange = {
-            myValue.value = it
-            phoneValue(myValue.value)
+            if (it.length <= maxChar) {
+                myValue.value = it
+                phoneValue(it)
+            }
         },
         label = { Label() },
         textStyle = TextStyle(fontFamily = FontFamily(Font(R.font.iran_sans))),
@@ -47,11 +51,13 @@ fun PhoneTextField(
         leadingIcon = { LeadingIcon() },
         shape = RoundedCornerShape(30.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        isError = enableError.value,
         colors = TextFieldDefaults.colors(
             disabledTextColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            disabledIndicatorColor = Color.Transparent,
+            errorCursorColor = Color.Transparent
         )
     )
 }

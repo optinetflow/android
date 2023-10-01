@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -33,9 +34,9 @@ fun PasswordTextField(
     passwordValue: (String) -> Unit
 ) {
     val password = rememberSaveable { mutableStateOf("") }
-    val passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val hasError = rememberSaveable { mutableStateOf(false) }
-    val isPasswordValid = password.value.length > 6
+    val maxChar = 16
 
     TextField(
         modifier = modifier
@@ -43,13 +44,28 @@ fun PasswordTextField(
             .padding(top = 10.dp),
         value = password.value,
         onValueChange = {
-            password.value = it
-            if (it.length > 6) passwordValue(it) else hasError.value = true
+            if (it.length <= maxChar) {
+                password.value = it
+                passwordValue(it)
+            }
         },
         label = { TextLabel() },
         textStyle = TextStyle(fontFamily = FontFamily(Font(R.font.iran_sans))),
         singleLine = true,
-        trailingIcon = { TrailingIcon(passwordVisible) },
+        trailingIcon = {
+            val image = if (passwordVisible) {
+                painterResource(R.drawable.baseline_visibility_24)
+            } else {
+                painterResource(R.drawable.baseline_visibility_off_24)
+            }
+
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                Image(
+                    painter = image,
+                    contentDescription = null
+                )
+            }
+        },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = { LeadingIcon() },
         isError = hasError.value,
@@ -59,24 +75,11 @@ fun PasswordTextField(
             disabledTextColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            disabledIndicatorColor = Color.Transparent,
+            errorCursorColor = Color.Transparent,
+            cursorColor = Color.Transparent
         )
     )
-}
-
-@Composable
-private fun TrailingIcon(passwordVisible: Boolean) {
-    var passwordVisible1 = passwordVisible
-    val image = if (passwordVisible1)
-        painterResource(R.drawable.baseline_visibility_24)
-    else painterResource(R.drawable.baseline_visibility_off_24)
-
-    IconButton(onClick = { passwordVisible1 = !passwordVisible1 }) {
-        Image(
-            painter = image,
-            contentDescription = null
-        )
-    }
 }
 
 @Composable

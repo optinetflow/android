@@ -249,5 +249,8 @@
     <string name="fields_are_empty">Fields are empty!</string>
     <string name="name">Name</string>
     <string name="last_name">Last name</string>
+    <string name="phone_is_empty">Phone is empty!</string>
+    <string name="password_is_empty">Password is empty!</string>
+    <string name="phone_and_password_is_empty">Please check your inputs.</string>
 
 </resources>

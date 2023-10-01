@@ -46,7 +46,7 @@ fun LoginRoute(
     val loginState = loginViewModel.loginState.collectAsStateWithLifecycle()
     LoginScreen(
         loginState = loginState.value,
-        onLoginClick = {},
+        onLoginClick = loginViewModel::login,
         onRegisterClick = onRegisterClick
     )
 }
@@ -55,12 +55,14 @@ fun LoginRoute(
 fun LoginScreen(
     modifier: Modifier = Modifier,
     loginState: LoginState,
-    onLoginClick: () -> Unit,
+    onLoginClick: (String, String) -> Unit,
     onRegisterClick: () -> Unit
 ) {
     val phone = rememberSaveable { mutableStateOf("") }
     val password = rememberSaveable { mutableStateOf("") }
-    val hasErrors = remember { mutableStateOf(false) }
+
+    val phoneEmpty = remember { mutableStateOf(false) }
+    val passwordEmpty = remember { mutableStateOf(false) }
 
     Box(modifier = modifier.fillMaxSize()) {
         Card(
@@ -87,7 +89,12 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(25.dp))
                 LoginButton(onLoginClick = {
-                    // TODO
+                    if (phone.value.isEmpty()) phoneEmpty.value = true
+                    if (password.value.isEmpty()) passwordEmpty.value = true
+
+                    if (phone.value.isNotEmpty() && password.value.isNotEmpty()) {
+                        onLoginClick(phone.value, password.value)
+                    }
                 })
             }
         }
@@ -107,15 +114,33 @@ fun LoginScreen(
         }
     }
 
-    LoginError(hasErrors = hasErrors)
+    ErrorHandle(phoneEmpty, passwordEmpty)
 }
 
 @Composable
-private fun LoginError(hasErrors: MutableState<Boolean>) {
+fun ErrorHandle(
+    phoneEmpty: MutableState<Boolean>,
+    passwordEmpty: MutableState<Boolean>
+) {
     val context = LocalContext.current
-    if (hasErrors.value) {
-        Toast.makeText(context, stringResource(R.string.fields_are_empty), Toast.LENGTH_SHORT)
-            .show()
+    when {
+        phoneEmpty.value && passwordEmpty.value -> {
+            Toast.makeText(
+                context,
+                stringResource(R.string.phone_and_password_is_empty),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        phoneEmpty.value -> {
+            Toast.makeText(context, stringResource(R.string.phone_is_empty), Toast.LENGTH_SHORT)
+                .show()
+        }
+
+        passwordEmpty.value -> {
+            Toast.makeText(context, stringResource(R.string.password_is_empty), Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 }
 
@@ -124,7 +149,7 @@ private fun LoginError(hasErrors: MutableState<Boolean>) {
 private fun LoginScreenPreview() {
     LoginScreen(
         loginState = LoginState.Loading,
-        onLoginClick = {},
+        onLoginClick = { _, _ -> },
         onRegisterClick = {}
     )
 }
