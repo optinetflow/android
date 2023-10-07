@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -52,7 +53,7 @@ fun LoginRoute(
 }
 
 @Composable
-fun LoginScreen(
+internal fun LoginScreen(
     modifier: Modifier = Modifier,
     loginState: LoginState,
     onLoginClick: (String, String) -> Unit,
@@ -112,43 +113,72 @@ fun LoginScreen(
                 textAlign = TextAlign.Center
             )
         }
-    }
 
+        when (loginState) {
+            is LoginState.Loading -> {
+                val isLoading = loginState.isLoading
+                if (isLoading) CenteredCircularProgressIndicator()
+            }
+            is LoginState.Success -> OnSuccess(loginState)
+            is LoginState.Error -> OnError()
+        }
+    }
     ErrorHandle(phoneEmpty, passwordEmpty)
 }
 
 @Composable
-fun ErrorHandle(
+private fun OnSuccess(loginState: LoginState.Success) {
+    // TODO: Navigate to Dashboard
+}
+
+@Composable
+private fun OnError() {
+    Toast.makeText(
+        LocalContext.current,
+        stringResource(R.string.invalid_phone_or_password),
+        Toast.LENGTH_SHORT
+    ).show()
+}
+
+@Composable
+private fun ErrorHandle(
     phoneEmpty: MutableState<Boolean>,
     passwordEmpty: MutableState<Boolean>
 ) {
     val context = LocalContext.current
     when {
-        phoneEmpty.value && passwordEmpty.value -> {
-            Toast.makeText(
-                context,
-                stringResource(R.string.phone_and_password_is_empty),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+        phoneEmpty.value && passwordEmpty.value -> Toast.makeText(
+            context,
+            stringResource(R.string.phone_and_password_is_empty),
+            Toast.LENGTH_SHORT
+        ).show()
 
-        phoneEmpty.value -> {
-            Toast.makeText(context, stringResource(R.string.phone_is_empty), Toast.LENGTH_SHORT)
-                .show()
-        }
+        phoneEmpty.value -> Toast.makeText(
+            context,
+            stringResource(R.string.phone_is_empty),
+            Toast.LENGTH_SHORT
+        ).show()
 
-        passwordEmpty.value -> {
-            Toast.makeText(context, stringResource(R.string.password_is_empty), Toast.LENGTH_SHORT)
-                .show()
-        }
+        passwordEmpty.value -> Toast.makeText(
+            context,
+            stringResource(R.string.password_is_empty),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
+
+@Composable
+fun CenteredCircularProgressIndicator() = CircularProgressIndicator(
+    Modifier
+        .fillMaxSize()
+        .wrapContentSize(Alignment.Center)
+)
 
 @Preview(showBackground = true, showSystemUi = true, locale = "fa")
 @Composable
 private fun LoginScreenPreview() {
     LoginScreen(
-        loginState = LoginState.Loading,
+        loginState = LoginState.Loading(isLoading = false),
         onLoginClick = { _, _ -> },
         onRegisterClick = {}
     )

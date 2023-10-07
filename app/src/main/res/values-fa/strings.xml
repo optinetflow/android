@@ -219,6 +219,7 @@
     <string name="phone_is_empty">شماره تلفن وارد نشده است!</string>
     <string name="password_is_empty">رمز عبور وارد نشده است!</string>
     <string name="phone_and_password_is_empty">لطفا ورودی های خود را چک کنید.</string>
+    <string name="invalid_phone_or_password">نام کاربری یا رمز عبور اشتباه است!</string>
 
     <string-array name="share_method">
         <item>QRcode</item>

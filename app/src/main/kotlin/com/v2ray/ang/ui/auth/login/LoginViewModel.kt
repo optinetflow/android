@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.v2ray.ang.AngApplication
 import com.v2ray.ang.data.repository.AuthRepository
+import com.v2ray.ang.util.AuthResult
 import com.v2ray.ang.util.Prefs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,32 +17,36 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Loading)
+    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Loading(isLoading = false))
     val loginState = _loginState.asStateFlow()
 
     fun login(phone: String, password: String) {
+        _loginState.value = LoginState.Loading(isLoading = true)
+
         viewModelScope.launch {
-            val response = authRepository.login(phone, password)
-            if (response.isNotEmpty()) {
-                _loginState.value = LoginState.Success(response)
-            } else {
-                _loginState.value = LoginState.Error(response)
+            when (val result = authRepository.login(phone, password)) {
+                is AuthResult.Loading -> _loginState.value = LoginState.Loading(isLoading = true)
+                is AuthResult.Success -> {
+                    saveToken(result.accessToken)
+                    _loginState.value = LoginState.Success(result.accessToken)
+                }
+
+                is AuthResult.Error -> _loginState.value = LoginState.Error(result.message)
             }
         }
     }
 
-    fun saveToken(accessToken: String) {
+    private fun saveToken(accessToken: String) {
         val prefs: Prefs by lazy {
             Prefs(AngApplication.instance)
         }
 
         prefs.myString = accessToken
     }
-
 }
 
 sealed interface LoginState {
-    data object Loading : LoginState
+    data class Loading(val isLoading: Boolean) : LoginState
     data class Success(val accessToken: String) : LoginState
     data class Error(val message: String) : LoginState
 }

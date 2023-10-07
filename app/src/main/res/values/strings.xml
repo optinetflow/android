@@ -252,5 +252,6 @@
     <string name="phone_is_empty">Phone is empty!</string>
     <string name="password_is_empty">Password is empty!</string>
     <string name="phone_and_password_is_empty">Please check your inputs.</string>
+    <string name="invalid_phone_or_password">Invalid phone or password</string>
 
 </resources>
