@@ -22,16 +22,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.v2ray.ang.R
 
 @Composable
 fun PhoneTextField(
     modifier: Modifier = Modifier,
-    phoneValue: (String) -> Unit
+    phoneValue: (String) -> Unit,
+    isErrorEnabled: Boolean = false
 ) {
     val myValue = rememberSaveable { mutableStateOf("") }
-    val enableError = remember { mutableStateOf(false) }
+    val enableError = remember { mutableStateOf(isErrorEnabled) }
     val maxChar = 11
 
     TextField(
@@ -81,5 +81,8 @@ private fun LeadingIcon() {
 @Composable
 @Preview(locale = "fa")
 private fun PhoneTextFieldPreview() {
-    PhoneTextField(phoneValue = { })
+    PhoneTextField(
+        phoneValue = { },
+        isErrorEnabled = false
+    )
 }

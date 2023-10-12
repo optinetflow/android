@@ -27,10 +27,10 @@ import com.v2ray.ang.R
 @Composable
 fun LastNameTextField(
     modifier: Modifier = Modifier,
-    lastName: (String) -> Unit
+    lastName: (String) -> Unit,
+    isErrorEnabled: Boolean = false
 ) {
     val lastValue = rememberSaveable { mutableStateOf("") }
-
     TextField(
         modifier = modifier
             .fillMaxWidth()
@@ -77,5 +77,8 @@ private fun LeadingIcon() {
 @Composable
 @Preview(showBackground = true, locale = "fa")
 private fun LastNameTextFieldPreview() {
-    LastNameTextField(lastName = {})
+    LastNameTextField(
+        lastName = {},
+        isErrorEnabled = false
+    )
 }

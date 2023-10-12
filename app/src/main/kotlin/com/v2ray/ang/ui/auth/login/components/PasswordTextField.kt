@@ -31,7 +31,8 @@ import com.v2ray.ang.R
 @Composable
 fun PasswordTextField(
     modifier: Modifier = Modifier,
-    passwordValue: (String) -> Unit
+    passwordValue: (String) -> Unit,
+    isErrorEnabled: Boolean = false
 ) {
     val password = rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -101,5 +102,8 @@ private fun TextLabel() {
 @Composable
 @Preview(locale = "fa")
 private fun PasswordTextFieldPreview() {
-    PasswordTextField(passwordValue = {})
+    PasswordTextField(
+        passwordValue = {},
+        isErrorEnabled = false
+    )
 }

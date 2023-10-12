@@ -18,13 +18,13 @@ import com.v2ray.ang.R
 
 @Composable
 fun RegisterButton(
-    onLoginClick: () -> Unit
+    onRegisterClick: () -> Unit
 ) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp),
-        onClick = onLoginClick,
+        onClick = onRegisterClick,
         colors = ButtonDefaults.elevatedButtonColors(
             containerColor = Color(R.color.purple)
         )

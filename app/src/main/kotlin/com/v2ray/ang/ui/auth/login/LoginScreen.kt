@@ -84,9 +84,15 @@ internal fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                PhoneTextField(phoneValue = { phone.value = it })
+                PhoneTextField(
+                    phoneValue = { phone.value = it },
+                    isErrorEnabled = phoneEmpty.value
+                )
                 Spacer(modifier = Modifier.height(10.dp))
-                PasswordTextField(passwordValue = { password.value = it })
+                PasswordTextField(
+                    passwordValue = { password.value = it },
+                    isErrorEnabled = passwordEmpty.value
+                )
 
                 Spacer(modifier = Modifier.height(25.dp))
                 LoginButton(onLoginClick = {

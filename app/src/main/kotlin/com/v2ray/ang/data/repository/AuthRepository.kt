@@ -4,5 +4,10 @@ import com.v2ray.ang.util.AuthResult
 
 interface AuthRepository {
     suspend fun login(phone: String, password: String): AuthResult<String>
-    suspend fun register(phone: String, password: String)
+    suspend fun register(
+        firstName: String,
+        lastName: String,
+        phone: String,
+        password1: String
+    ): AuthResult<String>
 }

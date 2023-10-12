@@ -97,5 +97,8 @@ private fun TextLabel() {
 @Composable
 @Preview(locale = "fa")
 private fun PasswordVerifyTextFieldPreview() {
-    PasswordTextField(passwordValue = {})
+    PasswordTextField(
+        passwordValue = {},
+        isErrorEnabled = false
+    )
 }

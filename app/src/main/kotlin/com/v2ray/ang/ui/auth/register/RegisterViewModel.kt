@@ -18,11 +18,23 @@ class RegisterViewModel @Inject constructor(
     val registerState = _registerState.asStateFlow()
 
     fun register(
+        firstName: String,
+        lastName: String,
         phone: String,
         password: String
     ) {
         viewModelScope.launch {
-            // TODO : authRepository.register()
+           /* when(val result = authRepository.register(firstName, lastName, phone, password)) {
+                is RegisterState.Loading -> {
+                    _registerState.value = RegisterState.Loading(result.isLoading)
+                }
+                is AuthRepository.RegisterResult.Success -> {
+                    _registerState.value = RegisterState.Success(result.accessToken)
+                }
+                is AuthRepository.RegisterResult.Error -> {
+                    _registerState.value = RegisterState.Error(result.message)
+                }
+            }*/
         }
     }
 }

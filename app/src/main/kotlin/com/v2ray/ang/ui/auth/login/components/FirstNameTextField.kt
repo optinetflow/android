@@ -27,7 +27,8 @@ import com.v2ray.ang.R
 @Composable
 fun FirstNameTextField(
     modifier: Modifier = Modifier,
-    firstName: (String) -> Unit
+    firstName: (String) -> Unit,
+    isErrorEnabled: Boolean = false
 ) {
     val name = rememberSaveable { mutableStateOf("") }
 
