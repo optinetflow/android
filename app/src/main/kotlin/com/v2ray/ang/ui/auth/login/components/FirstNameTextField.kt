@@ -10,6 +10,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,7 @@ fun FirstNameTextField(
     isErrorEnabled: Boolean = false
 ) {
     val name = rememberSaveable { mutableStateOf("") }
+    val firstNameEmpty = remember { mutableStateOf(true) }
 
     TextField(
         modifier = modifier
@@ -46,7 +48,7 @@ fun FirstNameTextField(
         singleLine = true,
         leadingIcon = { LeadingIcon() },
         shape = RoundedCornerShape(30.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         colors = TextFieldDefaults.colors(
             disabledTextColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,

@@ -12,7 +12,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,11 +33,13 @@ import com.v2ray.ang.ui.auth.login.components.PasswordTextField
 @Composable
 fun PasswordVerifyTextField(
     modifier: Modifier = Modifier,
-    passwordValue: (String) -> Unit
+    passwordValue: (String) -> Unit,
+    isErrorEnabled: Boolean
 ) {
     val password = rememberSaveable { mutableStateOf("") }
-    val passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val isPasswordValid = password.value.length > 6
+    val passwordVerifyEmpty = remember { mutableStateOf(false) }
 
     TextField(
         modifier = modifier
@@ -49,10 +53,24 @@ fun PasswordVerifyTextField(
         label = { TextLabel() },
         textStyle = TextStyle(fontFamily = FontFamily(Font(R.font.iran_sans))),
         singleLine = true,
-        trailingIcon = { TrailingIcon(passwordVisible) },
+        trailingIcon = {
+            val image = if (passwordVisible) {
+                painterResource(R.drawable.baseline_visibility_24)
+            } else {
+                painterResource(R.drawable.baseline_visibility_off_24)
+            }
+
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                Image(
+                    painter = image,
+                    contentDescription = null
+                )
+            }
+        },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = { LeadingIcon() },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        isError = isErrorEnabled,
         shape = RoundedCornerShape(30.dp),
         colors = TextFieldDefaults.colors(
             disabledTextColor = Color.Transparent,
@@ -61,21 +79,6 @@ fun PasswordVerifyTextField(
             disabledIndicatorColor = Color.Transparent
         )
     )
-}
-
-@Composable
-private fun TrailingIcon(passwordVisible: Boolean) {
-    var passwordVisible1 = passwordVisible
-    val image = if (passwordVisible1)
-        painterResource(R.drawable.baseline_visibility_24)
-    else painterResource(R.drawable.baseline_visibility_off_24)
-
-    IconButton(onClick = { passwordVisible1 = !passwordVisible1 }) {
-        Image(
-            painter = image,
-            contentDescription = null
-        )
-    }
 }
 
 @Composable

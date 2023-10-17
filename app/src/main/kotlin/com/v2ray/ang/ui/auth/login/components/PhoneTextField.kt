@@ -14,14 +14,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.v2ray.ang.R
 
 @Composable
@@ -32,7 +35,10 @@ fun PhoneTextField(
 ) {
     val myValue = rememberSaveable { mutableStateOf("") }
     val enableError = remember { mutableStateOf(isErrorEnabled) }
-    val maxChar = 11
+    val phoneEmpty = remember { mutableStateOf(false) }
+    val maxChar = 10
+
+    val getLocale = LocalConfiguration.current
 
     TextField(
         modifier = modifier
@@ -49,6 +55,14 @@ fun PhoneTextField(
         textStyle = TextStyle(fontFamily = FontFamily(Font(R.font.iran_sans))),
         singleLine = true,
         leadingIcon = { LeadingIcon() },
+        suffix = {
+            Text(
+                text = if (getLocale.equals("fa")) "+۹" else "+",
+                fontSize = 16.sp,
+                color = Color.Gray,
+                style = TextStyle(textDirection = TextDirection.ContentOrLtr)
+            )
+        },
         shape = RoundedCornerShape(30.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         isError = enableError.value,

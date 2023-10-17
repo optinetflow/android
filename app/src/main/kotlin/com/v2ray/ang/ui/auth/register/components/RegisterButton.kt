@@ -17,17 +17,19 @@ import androidx.compose.ui.unit.sp
 import com.v2ray.ang.R
 
 @Composable
-fun RegisterButton(
-    onRegisterClick: () -> Unit
+internal fun RegisterButton(
+    onRegisterClick: () -> Unit,
+    shouldBeEnabled: Boolean
 ) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp),
+        enabled = shouldBeEnabled,
         onClick = onRegisterClick,
         colors = ButtonDefaults.elevatedButtonColors(
             containerColor = Color(R.color.purple)
-        )
+        ),
     ) {
         Text(
             text = stringResource(R.string.register),

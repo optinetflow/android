@@ -1,5 +1,6 @@
 package com.v2ray.ang.ui.auth.register
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,10 +16,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -29,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.v2ray.ang.R
+import com.v2ray.ang.ui.auth.login.CenteredCircularProgressIndicator
 import com.v2ray.ang.ui.auth.login.components.FirstNameTextField
 import com.v2ray.ang.ui.auth.login.components.PasswordTextField
 import com.v2ray.ang.ui.auth.login.components.PhoneTextField
@@ -54,7 +58,7 @@ fun RegisterRoute(
 internal fun RegisterScreen(
     modifier: Modifier = Modifier,
     registerState: RegisterState,
-    onRegisterClick: (String, String, String, String) -> Unit,
+    onRegisterClick: (String, String, String, String, String) -> Unit,
     onLoginClick: () -> Unit
 ) {
     val firstName = remember { mutableStateOf("") }
@@ -63,11 +67,11 @@ internal fun RegisterScreen(
     val password = remember { mutableStateOf("") }
     val passwordVerify = remember { mutableStateOf("") }
 
-    val firstNameEmpty = remember { mutableStateOf(false) }
-    val lastNameEmpty = remember { mutableStateOf(false) }
-    val phoneEmpty = remember { mutableStateOf(false) }
-    val passwordEmpty = remember { mutableStateOf(false) }
-    val passwordVerifyEmpty = remember { mutableStateOf(false) }
+    val shouldShowBtn = firstName.value.isNotEmpty() &&
+            lastName.value.isNotEmpty() &&
+            phone.value.isNotEmpty() &&
+            password.value.isNotEmpty() &&
+            passwordVerify.value.isNotEmpty()
 
     Box(modifier = modifier.fillMaxSize()) {
         Card(
@@ -89,31 +93,35 @@ internal fun RegisterScreen(
 
                 FirstNameTextField(
                     firstName = { firstName.value = it },
-                    isErrorEnabled = firstNameEmpty.value
+                    isErrorEnabled = false
                 )
                 LastNameTextField(
                     lastName = { lastName.value = it },
-                    isErrorEnabled = lastNameEmpty.value
+                    isErrorEnabled = false
                 )
                 PhoneTextField(
                     phoneValue = { phone.value = it },
-                    isErrorEnabled = lastNameEmpty.value
+                    isErrorEnabled = false
                 )
                 PasswordTextField(
                     passwordValue = { password.value = it },
-                    isErrorEnabled = passwordEmpty.value
+                    isErrorEnabled = false
                 )
-                PasswordVerifyTextField(passwordValue = { passwordVerify.value = it })
+                PasswordVerifyTextField(
+                    passwordValue = { passwordVerify.value = it },
+                    isErrorEnabled = false
+                )
 
                 Spacer(modifier = modifier.height(15.dp))
-                RegisterButton {
-                    if (firstName.value.isEmpty()) println("firstName empty")
-                    if (lastName.value.isEmpty()) println("LastName empty")
-                    if (phone.value.isEmpty()) println("phone empty")
-
-                    if (password.value.isEmpty()) println("pass 1 empty")
-                    if (passwordVerify.value.isEmpty()) println("pass 2 empty")
-                }
+                RegisterButton(onRegisterClick = {
+                    onRegisterClick(
+                        firstName.value,
+                        lastName.value,
+                        phone.value,
+                        password.value,
+                        passwordVerify.value
+                    )
+                }, shouldBeEnabled = shouldShowBtn)
             }
         }
 
@@ -131,6 +139,31 @@ internal fun RegisterScreen(
             )
         }
     }
+
+    when (registerState) {
+        is RegisterState.Loading -> {
+            val isLoading = registerState.isLoading
+            if (isLoading) CenteredCircularProgressIndicator()
+        }
+
+        is RegisterState.Success -> OnSuccess(registerState)
+        is RegisterState.Error -> OnError(message = registerState.message)
+    }
+}
+
+@Composable
+private fun OnSuccess(registerState: RegisterState.Success) {
+    println("Register Success + ${registerState.accessToken}")
+}
+
+@Composable
+private fun OnError(message: List<String>) {
+    val context = LocalContext.current
+    val errorMessage = message.joinToString("\n")
+    println("Register Error + $errorMessage")
+    LaunchedEffect(key1 = errorMessage) {
+        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+    }
 }
 
 @Composable
@@ -138,7 +171,7 @@ internal fun RegisterScreen(
 private fun RegisterScreenPreview() {
     RegisterScreen(
         registerState = RegisterState.Loading(isLoading = false),
-        onLoginClick = {},
-        onRegisterClick = { _, _, _, _ -> }
+        onRegisterClick = { _, _, _, _, _ -> },
+        onLoginClick = {}
     )
 }

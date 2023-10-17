@@ -12,6 +12,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,7 +37,7 @@ fun PasswordTextField(
 ) {
     val password = rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    val hasError = rememberSaveable { mutableStateOf(false) }
+    val passwordEmpty = remember { mutableStateOf(false) }
     val maxChar = 16
 
     TextField(
@@ -69,7 +70,7 @@ fun PasswordTextField(
         },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = { LeadingIcon() },
-        isError = hasError.value,
+        isError = isErrorEnabled,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         shape = RoundedCornerShape(30.dp),
         colors = TextFieldDefaults.colors(
