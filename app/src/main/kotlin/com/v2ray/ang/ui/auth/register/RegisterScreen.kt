@@ -154,6 +154,7 @@ internal fun RegisterScreen(
 @Composable
 private fun OnSuccess(registerState: RegisterState.Success) {
     println("Register Success + ${registerState.accessToken}")
+    // TODO: Navigate to dashboard
 }
 
 @Composable
@@ -161,6 +162,7 @@ private fun OnError(message: List<String>) {
     val context = LocalContext.current
     val errorMessage = message.joinToString("\n")
     println("Register Error + $errorMessage")
+
     LaunchedEffect(key1 = errorMessage) {
         Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
     }

@@ -35,10 +35,8 @@ fun PhoneTextField(
 ) {
     val myValue = rememberSaveable { mutableStateOf("") }
     val enableError = remember { mutableStateOf(isErrorEnabled) }
-    val phoneEmpty = remember { mutableStateOf(false) }
-    val maxChar = 10
-
-    val getLocale = LocalConfiguration.current
+    val maxChar = 9
+    val getLocale = LocalConfiguration.current.locales[0].language
 
     TextField(
         modifier = modifier
@@ -48,16 +46,19 @@ fun PhoneTextField(
         onValueChange = {
             if (it.length <= maxChar) {
                 myValue.value = it
-                phoneValue(it)
+                phoneValue("9$it")
             }
         },
         label = { Label() },
-        textStyle = TextStyle(fontFamily = FontFamily(Font(R.font.iran_sans))),
+        textStyle = TextStyle(
+            fontFamily = FontFamily(Font(R.font.iran_sans)),
+            textDirection = TextDirection.Ltr
+        ),
         singleLine = true,
         leadingIcon = { LeadingIcon() },
         suffix = {
             Text(
-                text = if (getLocale.equals("fa")) "+۹" else "+",
+                text = if (getLocale.equals("fa")) "09" else "+",
                 fontSize = 16.sp,
                 color = Color.Gray,
                 style = TextStyle(textDirection = TextDirection.ContentOrLtr)
